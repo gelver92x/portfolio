@@ -1372,12 +1372,16 @@ ul {
   }
 
   .nav-shell {
+    position: relative;
+    z-index: 42;
     grid-template-columns: auto auto;
     padding: 0.78rem 0.9rem;
   }
 
   .menu-toggle {
     display: inline-flex;
+    position: relative;
+    z-index: 43;
     align-items: center;
     justify-content: center;
     justify-self: end;
@@ -1418,6 +1422,7 @@ ul {
 
   .nav-panel {
     position: fixed;
+    z-index: 42;
     top: 0.8rem;
     right: 0.8rem;
     width: min(320px, calc(100vw - 1.6rem));
@@ -1431,11 +1436,13 @@ ul {
     background: rgba(10, 10, 15, 0.94);
     backdrop-filter: blur(18px);
     box-shadow: var(--shadow-lg);
+    pointer-events: none;
     transform: translateX(120%);
     transition: transform 260ms ease;
   }
 
   .nav-panel.is-open {
+    pointer-events: auto;
     transform: translateX(0);
   }
 
@@ -1458,9 +1465,11 @@ ul {
   .nav-overlay {
     display: block;
     position: fixed;
+    z-index: 41;
     inset: 0;
     background: rgba(2, 6, 23, 0.55);
     opacity: 0;
+    pointer-events: none;
     visibility: hidden;
     transition:
       opacity 220ms ease,
@@ -1469,6 +1478,7 @@ ul {
 
   .nav-overlay.is-open {
     opacity: 1;
+    pointer-events: auto;
     visibility: visible;
   }
 
