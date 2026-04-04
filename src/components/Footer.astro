@@ -1,0 +1,35 @@
+---
+import { es } from "../i18n/es";
+---
+
+<footer class="footer">
+  <div class="container footer-shell">
+    <div class="footer-copy">
+      <p data-i18n="footer.madeWith">{es.footer.madeWith}</p>
+      <p>
+        © <span data-current-year></span> Gelver Villadiego.
+        <span data-i18n="footer.rights">{es.footer.rights}</span>
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#about"><span data-i18n="nav.about">{es.nav.about}</span></a>
+      <a href="#skills"><span data-i18n="nav.skills">{es.nav.skills}</span></a>
+      <a href="#projects"><span data-i18n="nav.projects">{es.nav.projects}</span></a>
+      <a href="#experience"><span data-i18n="nav.experience">{es.nav.experience}</span></a>
+      <a href="#contact"><span data-i18n="nav.contact">{es.nav.contact}</span></a>
+    </div>
+
+    <div class="footer-social">
+      <a href="mailto:gelvervilladiego@gmail.com" aria-label="Email">
+        <span>@</span>
+      </a>
+      <a href="#" aria-label="GitHub" data-placeholder-link="true">
+        <span>GH</span>
+      </a>
+      <a href="#" aria-label="LinkedIn" data-placeholder-link="true">
+        <span>in</span>
+      </a>
+    </div>
+  </div>
+</footer>

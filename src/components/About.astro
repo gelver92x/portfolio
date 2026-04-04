@@ -1,0 +1,37 @@
+---
+import { es } from "../i18n/es";
+---
+
+<section id="about" class="section section-alt">
+  <div class="container">
+    <div class="section-heading" data-reveal style="--reveal-delay: 0ms;">
+      <span class="section-eyebrow" data-i18n="about.eyebrow">{es.about.eyebrow}</span>
+      <h2 class="section-title" data-i18n="about.title">{es.about.title}</h2>
+      <p class="section-intro" data-i18n="about.summary">{es.about.summary}</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="stats-grid" data-reveal style="--reveal-delay: 100ms;">
+        {
+          es.about.stats.map((stat, index) => (
+            <article class="stat-card glass-card">
+              <strong data-i18n={`about.stats.${index}.value`}>{stat.value}</strong>
+              <span data-i18n={`about.stats.${index}.label`}>{stat.label}</span>
+            </article>
+          ))
+        }
+      </div>
+
+      <aside class="about-highlights glass-card" data-reveal style="--reveal-delay: 180ms;">
+        <h3 data-i18n="about.highlightsTitle">{es.about.highlightsTitle}</h3>
+        <div class="chip-list">
+          {
+            es.about.highlights.map((highlight, index) => (
+              <span class="chip" data-i18n={`about.highlights.${index}`}>{highlight}</span>
+            ))
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

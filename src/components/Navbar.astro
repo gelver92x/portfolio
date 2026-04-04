@@ -1,0 +1,56 @@
+---
+import { es } from "../i18n/es";
+
+const navItems = [
+  { id: "about", key: "about", label: es.nav.about },
+  { id: "skills", key: "skills", label: es.nav.skills },
+  { id: "projects", key: "projects", label: es.nav.projects },
+  { id: "experience", key: "experience", label: es.nav.experience },
+  { id: "contact", key: "contact", label: es.nav.contact }
+] as const;
+---
+
+<header class="navbar">
+  <div class="container nav-shell">
+    <a href="#hero" class="brand-mark" aria-label="Gelver Villadiego">
+      <span>GV</span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      data-menu-toggle
+      aria-expanded="false"
+      aria-controls="site-menu"
+      aria-label={es.nav.openMenu}
+    >
+      <span class="menu-toggle-box" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <span class="sr-only" data-menu-label>{es.nav.openMenu}</span>
+    </button>
+
+    <nav class="nav-panel" id="site-menu" data-menu>
+      <div class="nav-links">
+        {
+          navItems.map((item) => (
+            <a href={`#${item.id}`} class={`nav-link ${item.id === "about" ? "is-active" : ""}`} data-nav-link={item.id}>
+              <span data-i18n={`nav.${item.key}`}>{item.label}</span>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label={es.nav.languageLabel}>
+          <button class="lang-option is-active" type="button" data-lang-toggle="es" aria-pressed="true">ES</button>
+          <button class="lang-option" type="button" data-lang-toggle="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div class="nav-overlay" data-menu-overlay></div>
+</header>

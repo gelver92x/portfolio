@@ -1,0 +1,36 @@
+---
+import type { ProjectItem } from "../i18n/types";
+import { getTechMeta } from "../lib/tech";
+
+interface Props {
+  item: ProjectItem;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+---
+
+<article class="project-card glass-card" data-reveal style={`--reveal-delay: ${index * 100}ms;`}>
+  <div class="project-card-top">
+    <span class="project-icon" aria-hidden="true">{item.icon}</span>
+    <span class={`status-badge ${item.statusVariant}`} data-i18n={`projects.items.${index}.status`}>{item.status}</span>
+  </div>
+
+  <h3 class="project-title" data-i18n={`projects.items.${index}.title`}>{item.title}</h3>
+  <p class="project-description" data-i18n={`projects.items.${index}.description`}>{item.description}</p>
+
+  <div class="project-stack">
+    {
+      item.stack.map((stackItem) => {
+        const meta = getTechMeta(stackItem);
+
+        return (
+          <span class="project-stack-badge" style={`--badge-accent: ${meta.accent};`}>
+            <span class="project-stack-icon" set:html={meta.icon}></span>
+            <span>{meta.label}</span>
+          </span>
+        );
+      })
+    }
+  </div>
+</article>

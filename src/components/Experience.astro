@@ -1,0 +1,52 @@
+---
+import { es } from "../i18n/es";
+---
+
+<section id="experience" class="section">
+  <div class="container">
+    <div class="section-heading" data-reveal style="--reveal-delay: 0ms;">
+      <span class="section-eyebrow" data-i18n="experience.eyebrow">{es.experience.eyebrow}</span>
+      <h2 class="section-title" data-i18n="experience.title">{es.experience.title}</h2>
+      <p class="section-intro" data-i18n="experience.intro">{es.experience.intro}</p>
+    </div>
+
+    <div class="experience-layout">
+      <div class="timeline">
+        {
+          es.experience.jobs.map((job, jobIndex) => (
+            <article class="timeline-item glass-card" data-reveal style={`--reveal-delay: ${jobIndex * 120}ms;`}>
+              <div class="timeline-pin"></div>
+              <p class="timeline-period" data-i18n={`experience.jobs.${jobIndex}.period`}>{job.period}</p>
+              <h3 class="timeline-title">
+                <span data-i18n={`experience.jobs.${jobIndex}.company`}>{job.company}</span>
+                <span class="timeline-role" data-i18n={`experience.jobs.${jobIndex}.role`}>{job.role}</span>
+              </h3>
+              <ul class="timeline-list">
+                {
+                  job.bullets.map((bullet, bulletIndex) => (
+                    <li data-i18n={`experience.jobs.${jobIndex}.bullets.${bulletIndex}`}>{bullet}</li>
+                  ))
+                }
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+
+      <aside class="education-card glass-card" data-reveal style="--reveal-delay: 160ms;">
+        <h3 data-i18n="experience.educationTitle">{es.experience.educationTitle}</h3>
+        <div class="education-list">
+          {
+            es.experience.education.map((item, index) => (
+              <article class="education-item">
+                <p class="education-period" data-i18n={`experience.education.${index}.period`}>{item.period}</p>
+                <h4 data-i18n={`experience.education.${index}.institution`}>{item.institution}</h4>
+                <p data-i18n={`experience.education.${index}.degree`}>{item.degree}</p>
+              </article>
+            ))
+          }
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

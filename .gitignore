@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+
+preview.log
+preview.err
+
+lighthouse-*.report.json
+lighthouse-*.report.html
+
+Docs/
+image.png

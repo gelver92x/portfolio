@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">GV Portfolio</title>
+  <desc id="desc">Gradient monogram favicon for Gelver Villadiego portfolio.</desc>
+  <defs>
+    <linearGradient id="bg" x1="12" y1="12" x2="116" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1" />
+      <stop offset="0.5" stop-color="#8b5cf6" />
+      <stop offset="1" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="stroke" x1="24" y1="22" x2="102" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f8fafc" stop-opacity="0.96" />
+      <stop offset="1" stop-color="#cbd5e1" stop-opacity="0.74" />
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="30" fill="#0a0a0f" />
+  <rect x="12" y="12" width="104" height="104" rx="26" fill="url(#bg)" opacity="0.24" />
+  <path
+    d="M34 32.5h24.5c18 0 29 9.4 29 25.2 0 16.8-12.7 27.3-31.8 27.3H50v12.5H34V32.5Zm16 14.2v24.1h8.6c8.4 0 13.1-4.2 13.1-12.2 0-7.7-4.7-11.9-13.1-11.9H50Z"
+    fill="url(#stroke)"
+  />
+  <path
+    d="M82.6 97.5 67 67.8h16.3l15.5 29.7H82.6Z"
+    fill="url(#stroke)"
+  />
+</svg>

@@ -1,0 +1,390 @@
+---
+import "../styles/global.css";
+import { en } from "../i18n/en";
+import { es } from "../i18n/es";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = es.seo.title, description = es.seo.description } = Astro.props;
+const dictionaries = { es, en };
+const defaultLocale = "es";
+const basePath = import.meta.env.BASE_URL;
+const withBase = (path: string) => `${basePath}${path.replace(/^\//, "")}`;
+const ogImagePath = withBase("og-cover.svg");
+const ogImageUrl = Astro.site ? new URL(ogImagePath, Astro.site).toString() : ogImagePath;
+const faviconPath = withBase("favicon.svg");
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <link rel="icon" type="image/svg+xml" href={faviconPath} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      />
+    </noscript>
+  </head>
+  <body>
+    <div class="site-noise" aria-hidden="true"></div>
+    <slot />
+
+    <script is:inline define:vars={{ dictionaries, defaultLocale }}>
+      const STORAGE_KEY = "gv-portfolio-locale";
+      const localeDictionaries = dictionaries;
+      const defaultLang = defaultLocale;
+      let currentLocale = defaultLang;
+      let typingTimer;
+
+      const resolvePath = (source, path) =>
+        path.split(".").reduce((value, key) => {
+          if (value === undefined || value === null) {
+            return undefined;
+          }
+
+          return value[key];
+        }, source);
+
+      const getPreferredLocale = () => {
+        try {
+          const storedLocale = window.localStorage.getItem(STORAGE_KEY);
+
+          if (storedLocale && localeDictionaries[storedLocale]) {
+            return storedLocale;
+          }
+        } catch {}
+
+        const browserLocale = navigator.language.toLowerCase().startsWith("en") ? "en" : defaultLang;
+        return localeDictionaries[browserLocale] ? browserLocale : defaultLang;
+      };
+
+      const updateMeta = (dictionary) => {
+        document.title = dictionary.seo.title;
+
+        const selectors = {
+          description: 'meta[name="description"]',
+          ogTitle: 'meta[property="og:title"]',
+          ogDescription: 'meta[property="og:description"]',
+          twitterTitle: 'meta[name="twitter:title"]',
+          twitterDescription: 'meta[name="twitter:description"]'
+        };
+
+        const descriptionMeta = document.querySelector(selectors.description);
+        const ogTitleMeta = document.querySelector(selectors.ogTitle);
+        const ogDescriptionMeta = document.querySelector(selectors.ogDescription);
+        const twitterTitleMeta = document.querySelector(selectors.twitterTitle);
+        const twitterDescriptionMeta = document.querySelector(selectors.twitterDescription);
+
+        descriptionMeta?.setAttribute("content", dictionary.seo.description);
+        ogTitleMeta?.setAttribute("content", dictionary.seo.title);
+        ogDescriptionMeta?.setAttribute("content", dictionary.seo.description);
+        twitterTitleMeta?.setAttribute("content", dictionary.seo.title);
+        twitterDescriptionMeta?.setAttribute("content", dictionary.seo.description);
+      };
+
+      const updateLanguageButtons = (locale) => {
+        document.querySelectorAll("[data-lang-toggle]").forEach((button) => {
+          const isActive = button.getAttribute("data-lang-toggle") === locale;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+      };
+
+      const updateMenuLabel = () => {
+        const button = document.querySelector("[data-menu-toggle]");
+
+        if (!(button instanceof HTMLElement)) {
+          return;
+        }
+
+        const dictionary = localeDictionaries[currentLocale];
+        const expanded = button.getAttribute("aria-expanded") === "true";
+        const label = expanded ? dictionary.nav.closeMenu : dictionary.nav.openMenu;
+        button.setAttribute("aria-label", label);
+
+        const hiddenLabel = button.querySelector("[data-menu-label]");
+        hiddenLabel && (hiddenLabel.textContent = label);
+      };
+
+      const startTyping = (words) => {
+        const target = document.querySelector("[data-typing]");
+
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+
+        if (typingTimer) {
+          window.clearTimeout(typingTimer);
+        }
+
+        if (!Array.isArray(words) || words.length === 0) {
+          target.textContent = "";
+          return;
+        }
+
+        let wordIndex = 0;
+        let charIndex = 0;
+        let deleting = false;
+
+        const tick = () => {
+          const word = words[wordIndex] ?? "";
+
+          if (!deleting) {
+            charIndex += 1;
+            target.textContent = word.slice(0, charIndex);
+
+            if (charIndex === word.length) {
+              deleting = true;
+              typingTimer = window.setTimeout(tick, 1100);
+              return;
+            }
+
+            typingTimer = window.setTimeout(tick, 85);
+            return;
+          }
+
+          charIndex -= 1;
+          target.textContent = word.slice(0, charIndex);
+
+          if (charIndex === 0) {
+            deleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typingTimer = window.setTimeout(tick, 220);
+            return;
+          }
+
+          typingTimer = window.setTimeout(tick, 45);
+        };
+
+        target.textContent = "";
+        tick();
+      };
+
+      const applyTranslations = (locale) => {
+        currentLocale = localeDictionaries[locale] ? locale : defaultLang;
+        const dictionary = localeDictionaries[currentLocale];
+
+        document.documentElement.lang = currentLocale;
+        document.body.dataset.locale = currentLocale;
+        updateMeta(dictionary);
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.getAttribute("data-i18n");
+
+          if (!key) {
+            return;
+          }
+
+          const value = resolvePath(dictionary, key);
+
+          if (typeof value === "string") {
+            element.textContent = value;
+          }
+        });
+
+        updateLanguageButtons(currentLocale);
+        updateMenuLabel();
+        startTyping(dictionary.hero.typing);
+
+        try {
+          window.localStorage.setItem(STORAGE_KEY, currentLocale);
+        } catch {}
+      };
+
+      const initLanguageSwitch = () => {
+        document.querySelectorAll("[data-lang-toggle]").forEach((button) => {
+          button.addEventListener("click", () => {
+            const locale = button.getAttribute("data-lang-toggle") ?? defaultLang;
+            applyTranslations(locale);
+          });
+        });
+      };
+
+      const initReveal = () => {
+        const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
+
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+          revealItems.forEach((item) => item.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries, currentObserver) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) {
+                return;
+              }
+
+              entry.target.classList.add("is-visible");
+              currentObserver.unobserve(entry.target);
+            });
+          },
+          {
+            threshold: 0.2,
+            rootMargin: "0px 0px -48px"
+          }
+        );
+
+        revealItems.forEach((item) => observer.observe(item));
+      };
+
+      const initScrollSpy = () => {
+        const sections = Array.from(document.querySelectorAll("main section[id]"));
+        const navLinks = Array.from(document.querySelectorAll("[data-nav-link]"));
+
+        if (sections.length === 0 || navLinks.length === 0) {
+          return;
+        }
+
+        const setActiveLink = (sectionId) => {
+          navLinks.forEach((link) => {
+            link.classList.toggle("is-active", link.getAttribute("data-nav-link") === sectionId);
+          });
+        };
+
+        const getOffset = () => {
+          const navbar = document.querySelector(".navbar");
+          const navbarHeight = navbar instanceof HTMLElement ? navbar.offsetHeight : 96;
+          return navbarHeight + 28;
+        };
+
+        const updateActiveSection = () => {
+          const currentPosition = window.scrollY + getOffset();
+          let activeId = sections[0]?.id;
+
+          sections.forEach((section) => {
+            if (!(section instanceof HTMLElement)) {
+              return;
+            }
+
+            if (currentPosition >= section.offsetTop) {
+              activeId = section.id;
+            }
+          });
+
+          activeId && setActiveLink(activeId);
+        };
+
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) {
+            return;
+          }
+
+          ticking = true;
+          window.requestAnimationFrame(() => {
+            updateActiveSection();
+            ticking = false;
+          });
+        };
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", () => {
+            const targetId = link.getAttribute("data-nav-link");
+            targetId && setActiveLink(targetId);
+          });
+        });
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", updateActiveSection);
+        window.addEventListener("hashchange", updateActiveSection);
+        updateActiveSection();
+      };
+
+      const initMenu = () => {
+        const button = document.querySelector("[data-menu-toggle]");
+        const menu = document.querySelector("[data-menu]");
+        const overlay = document.querySelector("[data-menu-overlay]");
+        const menuLinks = document.querySelectorAll("[data-menu] a[href^='#']");
+
+        if (!(button instanceof HTMLElement) || !(menu instanceof HTMLElement) || !(overlay instanceof HTMLElement)) {
+          return;
+        }
+
+        const closeMenu = () => {
+          button.setAttribute("aria-expanded", "false");
+          menu.classList.remove("is-open");
+          overlay.classList.remove("is-open");
+          document.body.classList.remove("menu-open");
+          updateMenuLabel();
+        };
+
+        const openMenu = () => {
+          button.setAttribute("aria-expanded", "true");
+          menu.classList.add("is-open");
+          overlay.classList.add("is-open");
+          document.body.classList.add("menu-open");
+          updateMenuLabel();
+        };
+
+        button.addEventListener("click", () => {
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          expanded ? closeMenu() : openMenu();
+        });
+
+        overlay.addEventListener("click", closeMenu);
+        menuLinks.forEach((link) => link.addEventListener("click", closeMenu));
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            closeMenu();
+          }
+        });
+      };
+
+      const initCurrentYear = () => {
+        document.querySelectorAll("[data-current-year]").forEach((node) => {
+          node.textContent = String(new Date().getFullYear());
+        });
+      };
+
+      const initPlaceholderLinks = () => {
+        document.querySelectorAll("[data-placeholder-link]").forEach((link) => {
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+          });
+        });
+      };
+
+      const init = () => {
+        applyTranslations(getPreferredLocale());
+        initLanguageSwitch();
+        initReveal();
+        initScrollSpy();
+        initMenu();
+        initCurrentYear();
+        initPlaceholderLinks();
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init, { once: true });
+      } else {
+        init();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+---
+import { es } from "../i18n/es";
+import ProjectCard from "./ProjectCard.astro";
+---
+
+<section id="projects" class="section section-alt">
+  <div class="container">
+    <div class="section-heading" data-reveal style="--reveal-delay: 0ms;">
+      <span class="section-eyebrow" data-i18n="projects.eyebrow">{es.projects.eyebrow}</span>
+      <h2 class="section-title" data-i18n="projects.title">{es.projects.title}</h2>
+      <p class="section-intro" data-i18n="projects.intro">{es.projects.intro}</p>
+    </div>
+
+    <div class="projects-grid">
+      {es.projects.items.map((item, index) => <ProjectCard item={item} index={index} />)}
+    </div>
+  </div>
+</section>

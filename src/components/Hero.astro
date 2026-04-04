@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import { es } from "../i18n/es";
+import profileImage from "../img/img_front.jpg";
+---
+
+<section id="hero" class="hero section">
+  <div class="container hero-grid">
+    <div class="hero-copy" data-reveal style="--reveal-delay: 0ms;">
+      <span class="section-eyebrow hero-eyebrow" data-i18n="hero.greeting">{es.hero.greeting}</span>
+      <h1 class="hero-title">
+        <span class="hero-title-line gradient-text" data-i18n="hero.name">{es.hero.name}</span>
+      </h1>
+      <p class="hero-role" data-i18n="hero.role">{es.hero.role}</p>
+
+      <div class="hero-meta">
+        <span class="hero-pill hero-pill-strong" data-i18n="hero.tagline">{es.hero.tagline}</span>
+        <span class="hero-pill" data-i18n="hero.location">{es.hero.location}</span>
+      </div>
+
+      <p class="hero-summary" data-i18n="hero.summary">{es.hero.summary}</p>
+
+      <div class="typing-track">
+        <span class="typing-label" data-i18n="hero.typingLabel">{es.hero.typingLabel}</span>
+        <span class="typing-value" data-typing>{es.hero.typing[0]}</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#projects" class="button button-primary" data-i18n="hero.ctaPrimary">{es.hero.ctaPrimary}</a>
+        <a href="#contact" class="button button-secondary" data-i18n="hero.ctaSecondary">{es.hero.ctaSecondary}</a>
+      </div>
+
+      <a href="#about" class="scroll-indicator">
+        <span data-i18n="hero.scrollHint">{es.hero.scrollHint}</span>
+        <span class="scroll-indicator-chevron" aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="hero-visual" data-reveal style="--reveal-delay: 120ms;">
+      <div class="avatar-orbit">
+        <div class="avatar-shell">
+          <div class="avatar-glow"></div>
+          <div class="avatar-core">
+            <Image
+              src={profileImage}
+              alt="Gelver Villadiego"
+              class="avatar-photo"
+              widths={[320, 480, 640]}
+              sizes="(max-width: 768px) 72vw, 320px"
+              format="webp"
+              quality={92}
+              loading="eager"
+            />
+          </div>
+        </div>
+        <div class="hero-visual-card glass-card">
+          <p>Angular</p>
+          <p>Node.js</p>
+          <p>Flutter</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
