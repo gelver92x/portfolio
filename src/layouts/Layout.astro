@@ -130,6 +130,30 @@ const faviconPath = withBase("favicon.svg");
         hiddenLabel && (hiddenLabel.textContent = label);
       };
 
+      const getNavbarOffset = () => {
+        const navbar = document.querySelector(".navbar");
+        const navbarHeight = navbar instanceof HTMLElement ? navbar.offsetHeight : 96;
+        return navbarHeight + 28;
+      };
+
+      const scrollToSection = (sectionId) => {
+        const target = document.getElementById(sectionId);
+
+        if (!(target instanceof HTMLElement)) {
+          return;
+        }
+
+        const top = target.getBoundingClientRect().top + window.scrollY - getNavbarOffset();
+        window.scrollTo({
+          top: Math.max(top, 0),
+          behavior: "smooth"
+        });
+
+        if (window.location.hash !== `#${sectionId}`) {
+          window.history.pushState(null, "", `#${sectionId}`);
+        }
+      };
+
       const startTyping = (words) => {
         const target = document.querySelector("[data-typing]");
 
@@ -266,14 +290,8 @@ const faviconPath = withBase("favicon.svg");
           });
         };
 
-        const getOffset = () => {
-          const navbar = document.querySelector(".navbar");
-          const navbarHeight = navbar instanceof HTMLElement ? navbar.offsetHeight : 96;
-          return navbarHeight + 28;
-        };
-
         const updateActiveSection = () => {
-          const currentPosition = window.scrollY + getOffset();
+          const currentPosition = window.scrollY + getNavbarOffset();
           let activeId = sections[0]?.id;
 
           sections.forEach((section) => {
@@ -303,9 +321,21 @@ const faviconPath = withBase("favicon.svg");
         };
 
         navLinks.forEach((link) => {
-          link.addEventListener("click", () => {
+          link.addEventListener("click", (event) => {
             const targetId = link.getAttribute("data-nav-link");
-            targetId && setActiveLink(targetId);
+
+            if (!targetId) {
+              return;
+            }
+
+            event.preventDefault();
+            setActiveLink(targetId);
+
+            if (window.matchMedia("(max-width: 768px)").matches) {
+              return;
+            }
+
+            scrollToSection(targetId);
           });
         });
 
@@ -347,7 +377,27 @@ const faviconPath = withBase("favicon.svg");
         });
 
         overlay.addEventListener("click", closeMenu);
-        menuLinks.forEach((link) => link.addEventListener("click", closeMenu));
+        menuLinks.forEach((link) =>
+          link.addEventListener("click", (event) => {
+            if (!window.matchMedia("(max-width: 768px)").matches) {
+              return;
+            }
+
+            const href = link.getAttribute("href");
+
+            if (!href?.startsWith("#")) {
+              closeMenu();
+              return;
+            }
+
+            event.preventDefault();
+            const targetId = href.slice(1);
+            closeMenu();
+            window.setTimeout(() => {
+              targetId && scrollToSection(targetId);
+            }, 60);
+          })
+        );
 
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape") {

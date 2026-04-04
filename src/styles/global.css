@@ -1309,6 +1309,7 @@ ul {
 @media (max-width: 1024px) {
   .hero {
     min-height: auto;
+    padding-top: 8.8rem;
     padding-bottom: clamp(2.8rem, 6vw, 4.2rem);
   }
 
@@ -1335,11 +1336,28 @@ ul {
   .contact-panel {
     height: auto;
   }
+
+  .hero-grid {
+    gap: 1.75rem;
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+
+  .hero-title {
+    font-size: clamp(2.8rem, 10vw, 5rem);
+  }
+
+  .scroll-indicator {
+    margin-top: 1.5rem;
+  }
 }
 
 @media (max-aspect-ratio: 4/5) {
   .hero {
     min-height: auto;
+    padding-top: 8.8rem;
     padding-bottom: clamp(2.8rem, 6vw, 4.2rem);
   }
 }
@@ -1456,7 +1474,7 @@ ul {
 
   .hero {
     min-height: auto;
-    padding-top: 7.6rem;
+    padding-top: 8.4rem;
   }
 
   .hero-actions,
@@ -1481,7 +1499,7 @@ ul {
   }
 
   .scroll-indicator {
-    margin-top: 2rem;
+    margin-top: 1.25rem;
   }
 }
 
@@ -1497,6 +1515,10 @@ ul {
 
   .typing-track {
     width: 100%;
+  }
+
+  .hero-title {
+    font-size: clamp(2.45rem, 14vw, 3.7rem);
   }
 
   .skill-card,
