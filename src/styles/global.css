@@ -179,7 +179,7 @@ ul {
 .section-title {
   margin: 0.95rem 0 1rem;
   font-size: clamp(2.15rem, 4.9vw, 4rem);
-  line-height: 0.98;
+  line-height: 1.2;
   letter-spacing: -0.05em;
 }
 
