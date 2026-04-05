@@ -1,6 +1,8 @@
 :root {
   color-scheme: dark;
-  --nav-offset: 6.75rem;
+  --nav-offset: 5.75rem;
+  --section-padding-top: clamp(3.4rem, 5vw, 4.75rem);
+  --section-padding-bottom: clamp(4.8rem, 8vw, 6.4rem);
   --bg-primary: #0a0a0f;
   --bg-secondary: #111118;
   --bg-card: rgba(255, 255, 255, 0.03);
@@ -30,6 +32,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-offset);
 }
 
 body {
@@ -144,7 +147,8 @@ ul {
 
 .section {
   position: relative;
-  padding-block: clamp(4.8rem, 9vw, 7.2rem);
+  padding-top: var(--section-padding-top);
+  padding-bottom: var(--section-padding-bottom);
   scroll-margin-top: var(--nav-offset);
 }
 
@@ -390,8 +394,11 @@ ul {
 }
 
 .hero {
+  display: flex;
+  align-items: center;
   min-height: 100svh;
-  padding-top: clamp(8.2rem, 16vw, 10.8rem);
+  padding-top: clamp(7rem, 11vw, 8.8rem);
+  padding-bottom: clamp(3.8rem, 6vw, 5.4rem);
   overflow: hidden;
 }
 
@@ -1309,7 +1316,7 @@ ul {
 @media (max-width: 1024px) {
   .hero {
     min-height: auto;
-    padding-top: 8.8rem;
+    padding-top: 8.2rem;
     padding-bottom: clamp(2.8rem, 6vw, 4.2rem);
   }
 
@@ -1357,7 +1364,7 @@ ul {
 @media (max-aspect-ratio: 4/5) {
   .hero {
     min-height: auto;
-    padding-top: 8.8rem;
+    padding-top: 8.2rem;
     padding-bottom: clamp(2.8rem, 6vw, 4.2rem);
   }
 }
@@ -1484,7 +1491,7 @@ ul {
 
   .hero {
     min-height: auto;
-    padding-top: 8.4rem;
+    padding-top: 7.9rem;
   }
 
   .hero-actions,
@@ -1515,7 +1522,8 @@ ul {
 
 @media (max-width: 480px) {
   .section {
-    padding-block: 4.4rem;
+    padding-top: 3.6rem;
+    padding-bottom: 4.4rem;
   }
 
   .hero-meta {

@@ -130,10 +130,15 @@ const faviconPath = withBase("favicon.svg");
         hiddenLabel && (hiddenLabel.textContent = label);
       };
 
-      const getNavbarOffset = () => {
+      const syncNavbarOffset = () => {
         const navbar = document.querySelector(".navbar");
-        const navbarHeight = navbar instanceof HTMLElement ? navbar.offsetHeight : 96;
-        return navbarHeight + 28;
+        const navbarHeight = navbar instanceof HTMLElement ? navbar.getBoundingClientRect().height : 92;
+        document.documentElement.style.setProperty("--nav-offset", `${Math.round(navbarHeight)}px`);
+        return navbarHeight;
+      };
+
+      const getNavbarOffset = () => {
+        return syncNavbarOffset();
       };
 
       const scrollToSection = (sectionId) => {
@@ -340,7 +345,10 @@ const faviconPath = withBase("favicon.svg");
         });
 
         window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", updateActiveSection);
+        window.addEventListener("resize", () => {
+          syncNavbarOffset();
+          updateActiveSection();
+        });
         window.addEventListener("hashchange", updateActiveSection);
         updateActiveSection();
       };
@@ -421,6 +429,7 @@ const faviconPath = withBase("favicon.svg");
       };
 
       const init = () => {
+        syncNavbarOffset();
         applyTranslations(getPreferredLocale());
         initLanguageSwitch();
         initReveal();
